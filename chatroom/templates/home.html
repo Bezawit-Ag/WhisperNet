@@ -6,9 +6,7 @@
   <div class="container">
 
     <!-- Topics Start -->
-    {% include 'base/topics_component.html' %}
-
-    <!-- Topics End -->
+    {% include 'topics_component.html' %}  <!-- if this is directly under templates -->
 
     <!-- Room List Start -->
     <div class="roomList">
@@ -47,13 +45,13 @@
         </a>
       </div>
 
-      {% include 'base/feed_component.html' %}
+      {% include 'feed_component.html' %}  <!-- if this is directly under templates -->
 
     </div>
     <!-- Room List End -->
 
     <!-- Activities Start -->
-    {% include 'base/activity_component.html' %}
+    {% include 'activity_component.html' %}  <!-- if this is directly under templates -->
 
     <!-- Activities End -->
   </div>
