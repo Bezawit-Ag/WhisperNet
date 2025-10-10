@@ -1,18 +1,55 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, BaseUserManager
+
+# ----------------------------
+# Custom User Manager
+# ----------------------------
+class UserManager(BaseUserManager):
+    use_in_migrations = True
+
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+
+        return self.create_user(email, password, **extra_fields)
 
 
+# ----------------------------
+# Custom User Model
+# ----------------------------
 class User(AbstractUser):
+    username = None  # Remove the username field
     name = models.CharField(max_length=200, null=True)
-    email = models.EmailField(unique=True, null=True)
+    email = models.EmailField(unique=True)
     bio = models.TextField(null=True)
-
     avatar = models.ImageField(null=True, default="avatar.svg")
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
+    objects = UserManager()
 
+    def __str__(self):
+        return self.email
+
+
+# ----------------------------
+# Topic Model
+# ----------------------------
 class Topic(models.Model):
     name = models.CharField(max_length=200)
 
@@ -20,6 +57,9 @@ class Topic(models.Model):
         return self.name
 
 
+# ----------------------------
+# Room Model
+# ----------------------------
 class Room(models.Model):
     host = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     topic = models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True)
@@ -37,6 +77,9 @@ class Room(models.Model):
         return self.name
 
 
+# ----------------------------
+# Message Model
+# ----------------------------
 class Message(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
@@ -48,4 +91,4 @@ class Message(models.Model):
         ordering = ['-updated', '-created']
 
     def __str__(self):
-        return self.body[0:50]
+        return self.body[:50]
