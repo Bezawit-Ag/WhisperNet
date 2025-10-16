@@ -4,8 +4,15 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+# Add your required packages below
+# Example:
+# flask = "*"
+# requests = "*"
 
 [dev-packages]
+# Add development-only packages below if needed
+# Example:
+# black = "*"
 
 [requires]
-python_version = "3.13"
+python_version = "3.9"
