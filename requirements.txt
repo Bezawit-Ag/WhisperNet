@@ -1,13 +1,16 @@
-setuptools
-asgiref
-autopep8
-# IMPORTANT CHANGE
-Django>=4.2,<5.0 
-# RECOMMENDED CHANGE
-djangorestframework>=3.14
+# CORE FRAMEWORKS (Updated for Python 3.12+ compatibility)
+Django>=4.2.14,<5.0.0
+djangorestframework>=3.15.2
 
+# MISSING DEPENDENCY (Needed to fix "No module named 'corsheaders'")
+django-cors-headers>=4.3.1
+
+# OTHER DEPENDENCIES (Updated for compatibility with Django 4.2)
+asgiref>=3.7.2
+autopep8>=2.0.4
+setuptools
 Pillow>=10.0.0
-pycodestyle
-pytz
-sqlparse
-toml
+pycodestyle>=2.11.1
+pytz>=2024.1
+sqlparse>=0.5.0
+toml>=0.10.2
